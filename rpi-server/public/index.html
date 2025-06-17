@@ -1,0 +1,265 @@
+<!-- rpi-server/public/index.html -->
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WAPRO Network Test Console</title>
+    <link rel="stylesheet" href="css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <div class="container">
+        <header class="header">
+            <h1><i class="fas fa-network-wired"></i> WAPRO Network Test Console</h1>
+            <div class="status-indicator" id="systemStatus">
+                <i class="fas fa-circle"></i>
+                <span>Initializing...</span>
+            </div>
+        </header>
+
+        <nav class="nav-tabs">
+            <button class="tab-button active" data-tab="overview">
+                <i class="fas fa-tachometer-alt"></i> Overview
+            </button>
+            <button class="tab-button" data-tab="database">
+                <i class="fas fa-database"></i> Database
+            </button>
+            <button class="tab-button" data-tab="printers">
+                <i class="fas fa-print"></i> Printers
+            </button>
+            <button class="tab-button" data-tab="diagnostics">
+                <i class="fas fa-stethoscope"></i> Diagnostics
+            </button>
+            <button class="tab-button" data-tab="logs">
+                <i class="fas fa-file-alt"></i> Logs
+            </button>
+        </nav>
+
+        <!-- Overview Tab -->
+        <div class="tab-content active" id="overview">
+            <div class="grid-container">
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-server"></i> System Status</h3>
+                        <button class="btn btn-sm" onclick="refreshSystemStatus()">
+                            <i class="fas fa-sync-alt"></i>
+                        </button>
+                    </div>
+                    <div class="card-body" id="systemStatusDetails">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-database"></i> Database</h3>
+                        <button class="btn btn-sm" onclick="testDatabaseConnection()">
+                            <i class="fas fa-plug"></i> Test
+                        </button>
+                    </div>
+                    <div class="card-body" id="databaseStatus">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-print"></i> Printers</h3>
+                        <button class="btn btn-sm" onclick="testAllPrinters()">
+                            <i class="fas fa-check-circle"></i> Test All
+                        </button>
+                    </div>
+                    <div class="card-body" id="printersStatus">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <h3><i class="fas fa-chart-line"></i> Network</h3>
+                    </div>
+                    <div class="card-body" id="networkStatus">
+                        <div class="loading">Loading...</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Database Tab -->
+        <div class="tab-content" id="database">
+            <div class="section">
+                <h3>SQL Query Console</h3>
+                <div class="query-section">
+                    <div class="query-controls">
+                        <select id="databaseSelect">
+                            <option value="wapromag">WAPROMAG</option>
+                        </select>
+                        <button class="btn" onclick="executeQuery()">
+                            <i class="fas fa-play"></i> Execute
+                        </button>
+                        <button class="btn btn-secondary" onclick="clearQuery()">
+                            <i class="fas fa-eraser"></i> Clear
+                        </button>
+                    </div>
+                    <textarea id="sqlQuery" placeholder="Enter SQL query here..." rows="6">SELECT TOP 10 * FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_TYPE = 'BASE TABLE'</textarea>
+                    <div class="query-results" id="queryResults"></div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Quick Actions</h3>
+                <div class="quick-actions">
+                    <button class="btn" onclick="loadQuickQuery('tables')">
+                        <i class="fas fa-table"></i> Show Tables
+                    </button>
+                    <button class="btn" onclick="loadQuickQuery('kontrahenci')">
+                        <i class="fas fa-users"></i> Kontrahenci
+                    </button>
+                    <button class="btn" onclick="loadQuickQuery('produkty')">
+                        <i class="fas fa-box"></i> Produkty
+                    </button>
+                    <button class="btn" onclick="loadQuickQuery('dokumenty')">
+                        <i class="fas fa-file-invoice"></i> Dokumenty
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Printers Tab -->
+        <div class="tab-content" id="printers">
+            <div class="printers-grid">
+                <div class="printer-card" id="zebra1Card">
+                    <div class="printer-header">
+                        <h3><i class="fas fa-print"></i> ZEBRA-001</h3>
+                        <div class="printer-status" id="zebra1Status">
+                            <i class="fas fa-circle"></i>
+                            <span>Unknown</span>
+                        </div>
+                    </div>
+                    <div class="printer-body">
+                        <div class="printer-info" id="zebra1Info">
+                            <p><strong>Host:</strong> zebra-printer-1</p>
+                            <p><strong>Port:</strong> 9100</p>
+                            <p><strong>Model:</strong> ZT230</p>
+                        </div>
+                        <div class="printer-actions">
+                            <button class="btn btn-sm" onclick="testPrinter('zebra-1')">
+                                <i class="fas fa-plug"></i> Test Connection
+                            </button>
+                            <button class="btn btn-sm" onclick="printTestLabel('zebra-1')">
+                                <i class="fas fa-tag"></i> Test Print
+                            </button>
+                            <button class="btn btn-sm" onclick="sendPrinterCommand('zebra-1')">
+                                <i class="fas fa-terminal"></i> Send Command
+                            </button>
+                        </div>
+                        <div class="command-section" id="zebra1Commands" style="display: none;">
+                            <textarea placeholder="Enter ZPL command..." rows="3"></textarea>
+                            <button class="btn btn-sm" onclick="executePrinterCommand('zebra-1')">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="printer-card" id="zebra2Card">
+                    <div class="printer-header">
+                        <h3><i class="fas fa-print"></i> ZEBRA-002</h3>
+                        <div class="printer-status" id="zebra2Status">
+                            <i class="fas fa-circle"></i>
+                            <span>Unknown</span>
+                        </div>
+                    </div>
+                    <div class="printer-body">
+                        <div class="printer-info" id="zebra2Info">
+                            <p><strong>Host:</strong> zebra-printer-2</p>
+                            <p><strong>Port:</strong> 9100</p>
+                            <p><strong>Model:</strong> ZT410</p>
+                        </div>
+                        <div class="printer-actions">
+                            <button class="btn btn-sm" onclick="testPrinter('zebra-2')">
+                                <i class="fas fa-plug"></i> Test Connection
+                            </button>
+                            <button class="btn btn-sm" onclick="printTestLabel('zebra-2')">
+                                <i class="fas fa-tag"></i> Test Print
+                            </button>
+                            <button class="btn btn-sm" onclick="sendPrinterCommand('zebra-2')">
+                                <i class="fas fa-terminal"></i> Send Command
+                            </button>
+                        </div>
+                        <div class="command-section" id="zebra2Commands" style="display: none;">
+                            <textarea placeholder="Enter ZPL command..." rows="3"></textarea>
+                            <button class="btn btn-sm" onclick="executePrinterCommand('zebra-2')">
+                                <i class="fas fa-paper-plane"></i> Send
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h3>Common ZPL Commands</h3>
+                <div class="commands-list">
+                    <button class="cmd-btn" onclick="insertCommand('~HI')">~HI (Host ID)</button>
+                    <button class="cmd-btn" onclick="insertCommand('~HS')">~HS (Status)</button>
+                    <button class="cmd-btn" onclick="insertCommand('^WD')">^WD (Config)</button>
+                    <button class="cmd-btn" onclick="insertCommand('PING')">PING</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Diagnostics Tab -->
+        <div class="tab-content" id="diagnostics">
+            <div class="section">
+                <div class="diagnostics-header">
+                    <h3>System Diagnostics</h3>
+                    <button class="btn" onclick="runFullDiagnostics()">
+                        <i class="fas fa-stethoscope"></i> Run Full Diagnostics
+                    </button>
+                </div>
+                <div class="diagnostics-results" id="diagnosticsResults">
+                    <div class="info-message">
+                        <i class="fas fa-info-circle"></i>
+                        Click "Run Full Diagnostics" to start comprehensive system testing
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Logs Tab -->
+        <div class="tab-content" id="logs">
+            <div class="section">
+                <div class="logs-header">
+                    <h3>System Logs</h3>
+                    <div class="logs-controls">
+                        <button class="btn btn-sm" onclick="refreshLogs()">
+                            <i class="fas fa-sync-alt"></i> Refresh
+                        </button>
+                        <button class="btn btn-sm" onclick="clearLogs()">
+                            <i class="fas fa-trash"></i> Clear
+                        </button>
+                        <label>
+                            <input type="checkbox" id="autoRefreshLogs"> Auto-refresh
+                        </label>
+                    </div>
+                </div>
+                <div class="logs-container" id="logsContainer">
+                    <div class="log-entry info">
+                        <span class="timestamp">[2025-06-17 10:00:00]</span>
+                        <span class="level">INFO</span>
+                        <span class="message">System initialized</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast notifications -->
+    <div class="toast-container" id="toastContainer"></div>
+
+    <!-- Socket.IO -->
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="js/app.js"></script>
+</body>
+</html>

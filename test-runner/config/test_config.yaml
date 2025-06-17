@@ -1,0 +1,68 @@
+# test-runner/config/test_config.yaml
+environment: docker
+logging_level: INFO
+
+endpoints:
+  rpi_server: "http://rpi-server:8081"
+  rpi_gui: "http://rpi-server:8080"
+  mssql_wapromag: "mssql-wapromag:1433"
+  zebra_printer_1: "zebra-printer-1:9100"
+  zebra_printer_2: "zebra-printer-2:9100"
+  zebra_web_1: "zebra-printer-1:8080"
+  zebra_web_2: "zebra-printer-2:8080"
+
+database:
+  host: mssql-wapromag
+  port: 1433
+  database: WAPROMAG_TEST
+  username: sa
+  password: WapromagPass123!
+
+printers:
+  zebra-1:
+    name: "ZEBRA-001"
+    model: "ZT230"
+    host: "zebra-printer-1"
+    socket_port: 9100
+    web_port: 8080
+  zebra-2:
+    name: "ZEBRA-002"
+    model: "ZT410"
+    host: "zebra-printer-2"
+    socket_port: 9100
+    web_port: 8080
+
+timeouts:
+  connection: 10
+  response: 30
+  long_operation: 60
+  printer_response: 15
+
+test_data:
+  test_product_code: "TEST001"
+  test_contractor_code: "TESTK001"
+  test_document_number: "TEST/001/2025"
+
+performance_thresholds:
+  max_response_time: 5.0
+  max_query_time: 3.0
+  max_print_time: 10.0
+  min_success_rate: 80
+
+test_categories:
+  database:
+    - "test_rpi_sql.py"
+  printers:
+    - "test_zebra_connectivity.py"
+  integration:
+    - "test_integration.py"
+
+parallel_execution:
+  max_workers: 3
+  timeout_multiplier: 1.5
+
+reports:
+  generate_html: true
+  generate_json: true
+  generate_summary: true
+  include_screenshots: false
