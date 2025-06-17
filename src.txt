@@ -1,0 +1,92 @@
+wapro-network-mock
+├── .env.example
+├── .gitignore
+├── Makefile
+├── README.md
+├── docker-compose.yml
+├── docs
+│   ├── API.md
+│   ├── SQL_Schema.md
+│   ├── Testing.md
+│   ├── Troubleshooting.md
+│   └── ZEBRA_Commands.md
+├── monitoring
+│   ├── docker-compose.monitoring.yml
+│   ├── grafana
+│   │   ├── dashboards
+│   │   │   ├── database_metrics.json
+│   │   │   ├── network_overview.json
+│   │   │   └── printer_status.json
+│   │   └── datasources
+│   │       └── prometheus.yaml
+│   └── prometheus
+│       ├── alerts.yml
+│       └── prometheus.yml
+├── mssql-wapromag
+│   ├── Dockerfile
+│   ├── init.sql
+│   ├── backup
+│   └── config
+├── rpi-server
+│   ├── .env
+│   ├── Dockerfile
+│   ├── package.json
+│   ├── server.js
+│   ├── logs
+│   ├── public
+│   │   ├── css
+│   │   │   └── style.css
+│   │   ├── index.html
+│   │   └── js
+│   │       └── app.js
+│   ├── routes
+│   │   ├── diagnosticRoutes.js
+│   │   ├── healthRoutes.js
+│   │   ├── sqlRoutes.js
+│   │   └── zebraRoutes.js
+│   ├── services
+│   │   ├── diagnosticService.js
+│   │   ├── healthService.js
+│   │   ├── sqlService.js
+│   │   └── zebraService.js
+│   └── tests
+│       ├── integration.test.js
+│       ├── sql.test.js
+│       └── zebra.test.js
+├── scripts
+│   ├── backup-db.sh
+│   ├── restore-db.sh
+│   ├── setup.sh
+│   ├── start.sh
+│   ├── stop.sh
+│   └── test-all.sh
+├── test-runner
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── test_suite.py
+│   ├── config
+│   │   └── test_config.yaml
+│   ├── reports
+│   └── tests
+│       ├── test_integration.py
+│       ├── test_rpi_sql.py
+│       ├── test_rpi_zebra.py
+│       └── test_zebra_connectivity.py
+├── zebra-printer-1
+│   ├── Dockerfile
+│   ├── requirements.txt
+│   ├── zebra_mock.py
+│   ├── config
+│   │   └── printer_config.json
+│   ├── logs
+│   └── templates
+│       └── interface.html
+└── zebra-printer-2
+    ├── Dockerfile
+    ├── requirements.txt
+    ├── zebra_mock.py
+    ├── config
+    │   └── printer_config.json
+    ├── logs
+    └── templates
+        └── interface.html
