@@ -1,13 +1,32 @@
-# prinet
-mock dla sieci, do komunikacji z serwerem, rpi, drukarek w sieci
-
-
-# README.md
 # WAPRO Network Mock - Test Environment
+
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
+[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
+[![Node.js](https://img.shields.io/badge/Node.js-16%2B-green.svg)](https://nodejs.org/)
+[![MSSQL](https://img.shields.io/badge/MSSQL-2019-CC2927?logo=microsoft-sql-server&logoColor=white)](https://www.microsoft.com/sql-server/)
+
+> Mock środowiska sieciowego do testowania integracji z systemem WAPRO, zawierający symulowane serwery RPI, drukarki ZEBRA i bazę danych MSSQL.
+
+## 📚 Dokumentacja
+
+- [API Dokumentacja](docs/API.md) - Opis dostępnych endpointów API
+- [Schemat bazy danych](docs/SQL_Schema.md) - Struktura bazy danych WAPROMAG
+- [Testowanie](docs/Testing.md) - Instrukcje dotyczące testowania
+- [Komendy ZEBRA](docs/ZEBRA_Commands.md) - Obsługiwane komendy drukarek
+- [Rozwiązywanie problemów](docs/Troubleshooting.md) - Typowe problemy i ich rozwiązania
 
 Kompletne środowisko testowe do symulacji sieci WAPRO z bazą danych MSSQL, serwerem RPI i drukarkami ZEBRA.
 
 ## 🚀 Szybki start
+
+### Wymagania wstępne
+
+- Docker 20.10+
+- Docker Compose 1.29+
+- Git
+
+### Instalacja
 
 ```bash
 # Konfiguracja środowiska
@@ -23,7 +42,7 @@ make status
 make test
 ```
 
-## 📁 Struktura projektu
+## 🏗️ Architektura
 
 ```
 wapro-network-mock/
@@ -34,8 +53,20 @@ wapro-network-mock/
 ├── zebra-printer-1/          # Mock drukarki ZEBRA-001
 ├── zebra-printer-2/          # Mock drukarki ZEBRA-002
 ├── test-runner/              # Automatyczne testy
+├── monitoring/               # Konfiguracja monitoringu (Grafana + Prometheus)
 └── scripts/                  # Skrypty pomocnicze
 ```
+
+## 🌐 Dostępne usługi
+
+| Usługa | Port | Opis |
+|--------|------|------|
+| RPI Server GUI | 8080 | Interfejs użytkownika |
+| RPI Server API | 8081 | API REST |
+| ZEBRA Printer 1 | 8091 | Interfejs drukarki 1 |
+| ZEBRA Printer 2 | 8092 | Interfejs drukarki 2 |
+| Grafana | 3000 | Panel monitoringu |
+| MSSQL Server | 1433 | Baza danych WAPROMAG |
 
 ## 🌐 Dostępne interfejsy
 
@@ -47,6 +78,8 @@ wapro-network-mock/
 - **MSSQL WAPROMAG**: localhost:1433
 
 ## 🧪 Testowanie
+
+### Uruchamianie testów
 
 ```bash
 # Wszystkie testy
@@ -61,6 +94,27 @@ make test-zebra
 # Testy integracyjne
 make test-integration
 ```
+
+### Generowanie raportów
+
+Wyniki testów są zapisywane w formacie JUnit XML w katalogu `test-results/`.
+
+### Testowanie ręczne
+
+1. **Testowanie drukarek**
+   ```bash
+   # Wysyłanie przykładowej komendy do drukarki 1
+   echo "~HI" | nc localhost 9100
+   
+   # Wysyłanie etykiety testowej
+   echo -e "^XA\n^FO50,50^A0N,50,50^FDTest Label^FS\n^XZ" | nc localhost 9100
+   ```
+
+2. **Testowanie bazy danych**
+   ```bash
+   # Połączenie z bazą danych
+   sqlcmd -S localhost,1433 -U sa -P WapromagPass123!
+   ```
 
 ## 🏥 Monitoring i diagnostyka
 
@@ -96,8 +150,61 @@ make restore-db
 ## 📊 Funkcjonalności
 
 ### RPI Server
-- ✅ GUI do zarządzania systemem
-- ✅ REST API do komunikacji
+- ✅ Interfejs użytkownika do zarządzania systemem
+- ✅ REST API do komunikacji zewnętrznej
+- ✅ Integracja z bazą danych WAPROMAG
+- ✅ Obsługa wielu drukarek ZEBRA
+- ✅ Panel monitoringu w czasie rzeczywistym
+
+### Monitorowanie
+- 🚀 Pulpity nawigacyjne Grafana
+- 📊 Metryki wydajności w czasie rzeczywistym
+- 🔔 Alerty i powiadomienia
+- 📈 Monitorowanie stanu drukarek
+
+### Bezpieczeństwo
+- 🔒 Uwierzytelnianie użytkowników
+- 🔑 Bezpieczne przechowywanie haseł
+- 🔄 Automatyczne kopie zapasowe bazy danych
+
+## 🔄 Zarządzanie
+
+### Uruchamianie i zatrzymywanie
+
+```bash
+# Uruchomienie wszystkich usług
+make start
+
+# Zatrzymanie wszystkich usług
+make stop
+
+# Restart usług
+make restart
+
+# Wyświetlenie statusu
+make status
+```
+
+### Konserwacja
+
+```bash
+# Utworzenie kopii zapasowej bazy danych
+make backup-db
+
+# Przywrócenie bazy danych z kopii zapasowej
+make restore-db
+
+# Czyszczenie środowiska
+make clean
+```
+
+## 🤝 Wsparcie
+
+W przypadku problemów, zapoznaj się z sekcją [Rozwiązywanie problemów](docs/Troubleshooting.md) lub zgłoś nowy problem w zakładce Issues.
+
+## 📄 Licencja
+
+Ten projekt jest objęty licencją MIT. Szczegóły znajdują się w pliku [LICENSE](LICENSE).
 - ✅ Testy połączeń z bazą danych
 - ✅ Wysyłanie komend do drukarek ZEBRA
 - ✅ Diagnostyka systemu

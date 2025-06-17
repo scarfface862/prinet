@@ -319,4 +319,8 @@ def generate_health_report(self):
         total_components = len(health_data['components'])
         health_percentage = (healthy_components / total_components * 100) if total_components > 0 else 0
 
-        logger.info(f
+        logger.info(f"""📊 Wygenerowano raport zdrowia: {health_percentage:.1f}% komponentów zdrowych""")
+
+    except Exception as e:
+        logger.error(f"Błąd podczas generowania raportu zdrowia: {e}")
+

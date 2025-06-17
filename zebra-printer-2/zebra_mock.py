@@ -136,7 +136,8 @@ class ZebraPrinterMock:
             server_socket.close()
 
     def start_web_server(self):
-        self.web_app.run(host='0.0.0.0', port=8080, debug=False)
+        port = int(self.web_app.config.get('PORT', 8080))
+        self.web_app.run(host='0.0.0.0', port=port, debug=False)
 
     def start(self):
         # Start socket server in separate thread
