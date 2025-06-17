@@ -1,0 +1,30 @@
+{
+  "name": "rpi-server",
+  "version": "1.0.0",
+  "description": "RPI Server Mock for WAPRO Network",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "test": "mocha tests/**/*.test.js"
+  },
+  "dependencies": {
+    "express": "^4.18.2",
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "dotenv": "^16.3.1",
+    "morgan": "^1.10.0",
+    "mssql": "^10.0.1",
+    "prom-client": "^14.2.0",
+    "winston": "^3.10.0"
+  },
+  "devDependencies": {
+    "mocha": "^10.2.0",
+    "chai": "^4.3.7",
+    "supertest": "^6.3.3"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  },
+  "author": "WAPRO Mock Team",
+  "license": "MIT"
+}
