@@ -17,7 +17,7 @@ WORKDIR /app
 COPY package*.json ./
 
 # Instalacja zależności
-RUN npm ci --only=production
+RUN npm install --production
 
 # Utworzenie użytkownika bez uprawnień root
 RUN addgroup -g 1001 -S nodejs && \
