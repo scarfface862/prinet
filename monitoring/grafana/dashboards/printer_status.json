@@ -1,0 +1,64 @@
+{
+  "dashboard": {
+    "id": null,
+    "title": "ZEBRA Printers Status",
+    "tags": ["zebra", "printers", "status"],
+    "timezone": "browser",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Printer Availability",
+        "type": "stat",
+        "targets": [
+          {
+            "expr": "printer_available",
+            "legendFormat": "{{printer_name}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "color": {
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "red", "value": 0},
+                {"color": "green", "value": 1}
+              ]
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0}
+      },
+      {
+        "id": 2,
+        "title": "Print Jobs",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "printer_jobs_total",
+            "legendFormat": "{{printer_name}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0}
+      },
+      {
+        "id": 3,
+        "title": "Response Times",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "printer_response_time_seconds",
+            "legendFormat": "{{printer_name}}"
+          }
+        ],
+        "gridPos": {"h": 8, "w": 24, "x": 0, "y": 8}
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    },
+    "refresh": "10s"
+  }
+}

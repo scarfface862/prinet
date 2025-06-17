@@ -24,9 +24,7 @@ services:
 
   # Raspberry Pi Mock Server
   rpi-server:
-    build:
-      context: ./rpi-server
-      dockerfile: Dockerfile
+    build: ./rpi-server
     container_name: rpi-mock-server
     ports:
       - "8080:8080"  # GUI Web Interface
@@ -52,9 +50,7 @@ services:
 
   # ZEBRA Printer Mock 1
   zebra-printer-1:
-    build:
-      context: ./zebra-printer-1
-      dockerfile: Dockerfile
+    build: ./zebra-printer-1
     container_name: zebra-printer-1
     ports:
       - "9100:9100"  # Standard ZEBRA port
@@ -73,9 +69,7 @@ services:
 
   # ZEBRA Printer Mock 2
   zebra-printer-2:
-    build:
-      context: ./zebra-printer-2
-      dockerfile: Dockerfile
+    build: ./zebra-printer-2
     container_name: zebra-printer-2
     ports:
       - "9101:9100"
@@ -94,9 +88,7 @@ services:
 
   # Test Runner Service
   test-runner:
-    build:
-      context: ./test-runner
-      dockerfile: Dockerfile
+    build: ./test-runner
     container_name: test-runner
     environment:
       - TEST_ENVIRONMENT=docker
@@ -118,7 +110,7 @@ services:
     image: grafana/grafana:latest
     container_name: wapro-monitoring
     ports:
-      - "3000:3000"
+      - "3005:3000"
     environment:
       - GF_SECURITY_ADMIN_PASSWORD=admin123
     volumes:
